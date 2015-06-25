@@ -1,3 +1,11 @@
+var lat = function (photo) {
+    return photo.geometry.coordinates[0];
+};
+
+var lon = function (photo) {
+    return photo.geometry.coordinates[1];
+};
+
 module.exports = {
     bounds: function (photos) {
         var bounds = {
@@ -8,26 +16,24 @@ module.exports = {
         };
 
         if (photos.length > 0) {
-            var photo = photos[0];
-
-            bounds.min_latitude = bounds.max_latitude = photo.latitude;
-            bounds.min_longitude = bounds.max_longitude = photo.longitude;
+            bounds.min_latitude = bounds.max_latitude = lat(photos[0]);
+            bounds.min_longitude = bounds.max_longitude = lon(photos[0]);
 
             photos.slice(1).forEach(function (photo) {
-                if (photo.latitude < bounds.min_latitude) {
-                    bounds.min_latitude = photo.latitude;
+                if (lat(photo) < bounds.min_latitude) {
+                    bounds.min_latitude = lat(photo);
                 }
 
-                if (photo.latitude > bounds.max_latitude) {
-                    bounds.max_latitude = photo.latitude;
+                if (lat(photo) > bounds.max_latitude) {
+                    bounds.max_latitude = lat(photo);
                 }
 
-                if (photo.longitude < bounds.min_longitude) {
-                    bounds.min_longitude = photo.longitude;
+                if (lon(photo) < bounds.min_longitude) {
+                    bounds.min_longitude = lon(photo);
                 }
 
-                if (photo.longitude > bounds.max_longitude) {
-                    bounds.max_longitude = photo.longitude;
+                if (lon(photo) > bounds.max_longitude) {
+                    bounds.max_longitude = lon(photo);
                 }
             });
         }

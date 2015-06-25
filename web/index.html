@@ -76,26 +76,24 @@
                     controls: ['zoomControl']
                 });
 
-                var clusterer = new ymaps.Clusterer({
-                    gridSize: 32,
-                    hasBalloon: false,
-                    hasHint: false,
-                    clusterDisableClickZoom: true,
-                    clusterOpenBalloonOnClick: false,
-                    preset: 'islands#blueIcon'
-                });
-                clusterer.events.add(['click'], function (e) {
-                    var target = e.get('target');
-                    var geoObjects = target.getGeoObjects
-                        ? target.getGeoObjects()
-                        : [target];
-
-                    showGeoView(geoObjects);
+                var objectManager = new ymaps.ObjectManager({
+                    clusterize: true
                 });
 
-                map.geoObjects.add(clusterer);
+                map.geoObjects.add(objectManager);
 
-                $.get('/data', function(data) {
+                // clusterer.events.add(['click'], function (e) {
+                //     var target = e.get('target');
+                //     var geoObjects = target.getGeoObjects
+                //         ? target.getGeoObjects()
+                //         : [target];
+
+                //     showGeoView(geoObjects);
+                // });
+
+                var size = window.location.hash.substr(1) || 100000;
+
+                $.get('/data/' + size, function(data) {
                     map.setCenter([
                         data.center.latitude,
                         data.center.longitude
@@ -109,12 +107,8 @@
                         data.bounds.max_longitude
                     ]]);
 
-                    data.photos.forEach(function (photo) {
-                        clusterer.add(new ymaps.Placemark([
-                            photo.latitude,
-                            photo.longitude
-                        ], { photo: photo }, { preset: 'islands#circleIcon' }));
-                    });
+                    console.log(data.photos.features.length + ' photos to be shown.');
+                    objectManager.add(data.photos);
                 });
             });
         });
