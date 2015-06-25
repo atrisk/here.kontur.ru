@@ -33,3 +33,9 @@ body {
 .fotorama a {
     font-size: 1.5em;
 }
+
+.fotorama__stage, fotorama_loaded {
+    background: #fff;
+    width: 640px;
+    height: 640px;
+}
