@@ -29,7 +29,8 @@
             var data = [];
 
             geoObjects.forEach(function (geoObject) {
-                var photo = geoObject.properties.get('photo');
+                var photo = geoObject.properties;
+
                 data.push({
                     img: photo.image_l,
                     thumb: photo.image_s,
@@ -77,21 +78,48 @@
                 });
 
                 var objectManager = new ymaps.ObjectManager({
-                    clusterize: true/*,
+                    clusterize: true,
+                    clusterDisableClickZoom: true,
                     geoObjectOpenBalloonOnClick: false,
-                    clusterOpenBalloonOnClick: false*/
+                    clusterOpenBalloonOnClick: false
                 });
 
                 map.geoObjects.add(objectManager);
 
-                // clusterer.events.add(['click'], function (e) {
-                //     var target = e.get('target');
-                //     var geoObjects = target.getGeoObjects
-                //         ? target.getGeoObjects()
-                //         : [target];
+                objectManager.objects.events.add(['mouseenter', 'mouseleave'], function (e) {
+                    var id = e.get('objectId');
 
-                //     showGeoView(geoObjects);
-                // });
+                    objectManager.objects.setObjectOptions(id, {
+                        preset: e.get('type') == 'mouseenter'
+                            ? 'islands#yellowIcon'
+                            : 'islands#blueIcon'
+                    });
+                });
+
+                objectManager.clusters.events.add(['mouseenter', 'mouseleave'], function (e) {
+                    var id = e.get('objectId');
+
+                    objectManager.clusters.setClusterOptions(id, {
+                        preset: e.get('type') == 'mouseenter'
+                            ? 'islands#yellowClusterIcons'
+                            : 'islands#blueClusterIcons'
+                    });
+                });
+
+                objectManager.objects.events.add('click', function (e) {
+                    var id = e.get('objectId'),
+                        photo = objectManager.objects.getById(id);
+
+                    showGeoView([photo]);
+                });
+
+                objectManager.clusters.events.add('click', function (e) {
+                    var id = e.get('objectId'),
+                        cluster = objectManager.clusters.getById(id),
+                        photos = cluster.properties.geoObjects;
+
+                    showGeoView(photos);
+                });
 
                 var size = window.location.hash.substr(1) || 100000;
 
@@ -111,26 +139,6 @@
 
                     console.log(data.photos.features.length + ' photos to be shown.');
                     objectManager.add(data.photos);
-
-                    objectManager.objects.events.add(['mouseenter', 'mouseleave'], function (e) {
-                        var id = e.get('objectId');
-
-                        objectManager.objects.setObjectOptions(id, {
-                            preset: e.get('type') == 'mouseenter'
-                                ? 'islands#yellowIcon'
-                                : 'islands#blueIcon'
-                        });
-                    });
-
-                    objectManager.clusters.events.add(['mouseenter', 'mouseleave'], function (e) {
-                        var id = e.get('objectId');
-
-                        objectManager.clusters.setClusterOptions(id, {
-                            preset: e.get('type') == 'mouseenter'
-                                ? 'islands#yellowClusterIcons'
-                                : 'islands#blueClusterIcons'
-                        });
-                    });
                 });
             });
         });
