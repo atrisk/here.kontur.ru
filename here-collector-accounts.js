@@ -20,10 +20,10 @@ mongo.connect(mongo_url, function (err, db) {
         client_secret: client_secret
     });
 
-    var upserted_count = 0;
+    // var upserted_count = 0;
 
     var use = function (err, photos, pagination, remaining, limit) {
-        if (err) {
+        /* if (err) {
             console.log(err);
             console.log('Retrying after ' + err.code + '...');
 
@@ -32,7 +32,7 @@ mongo.connect(mongo_url, function (err, db) {
             }, 1000);
 
             return;
-        }
+        } */
 
         photos.forEach(function (photo) {
             collection.updateOne({ id: photo.id }, photo, { upsert: true }, function(err, result) {
@@ -42,10 +42,10 @@ mongo.connect(mongo_url, function (err, db) {
             });
         });
 
-        if (upserted_count > 0 && pagination.next) {
+        /* if (upserted_count > 0 && pagination.next) {
             pagination.next(use);
         }
-        else {
+        else { */
             --user_count;
 
             if (user_count == 0) {
@@ -53,7 +53,7 @@ mongo.connect(mongo_url, function (err, db) {
                     db.close();
                 }, 10000);
             }
-        }
+        /* } */
     };
 
     var user_count = users.length;
