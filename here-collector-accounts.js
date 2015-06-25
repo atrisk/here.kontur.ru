@@ -39,6 +39,8 @@ mongo.connect(mongo_url, function (err, db) {
             
             return;
         }
+        
+        console.log(photos.length + ' photos.');
 
         photos.forEach(function (photo) {
             collection.updateOne({ id: photo.id }, photo, { upsert: true }, function(err, result) {
@@ -69,6 +71,8 @@ mongo.connect(mongo_url, function (err, db) {
             url : 'https://api.instagram.com/v1/users/search?q=' + user + '&client_id=' + client_id
         }, function (err, response, body) {
             var data = JSON.parse(body);
+
+            console.log('User: ' + data.data[0]);
 
             ig.user_media_recent(data.data[0].id, use);
         });
