@@ -39,6 +39,7 @@ mongo.connect(mongo_url, function (err, db) {
 
         docs.forEach(function (photo) {
             photos.push({
+                id: photo.id,
                 geometry: {
                     type: 'Point',
                     coordinates: [
@@ -47,11 +48,12 @@ mongo.connect(mongo_url, function (err, db) {
                     ]
                 },
                 properties: {
-                    link:    photo.link,
-                    image_l: photo.images.standard_resolution.url,
-                    image_s: photo.images.thumbnail.url,
-                    text:    photo.caption ? photo.caption.text : '',
-                    user:    photo.user.username
+                    link:        photo.link,
+                    image_l:     photo.images.standard_resolution.url,
+                    image_s:     photo.images.thumbnail.url,
+                    text:        photo.caption ? photo.caption.text : '',
+                    user:        photo.user.username,
+                    hintContent: photo.user.username
                 }
             });
         });

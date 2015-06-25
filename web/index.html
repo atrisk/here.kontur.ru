@@ -77,13 +77,10 @@
                 });
 
                 var objectManager = new ymaps.ObjectManager({
-                    clusterize: true,
+                    clusterize: true/*,
                     geoObjectOpenBalloonOnClick: false,
-                    clusterOpenBalloonOnClick: false
+                    clusterOpenBalloonOnClick: false*/
                 });
-
-                objectManager.objects.events.add(['mouseenter', 'mouseleave'], onObjectEvent);
-                objectManager.clusters.events.add(['mouseenter', 'mouseleave'], onClusterEvent);
 
                 map.geoObjects.add(objectManager);
 
@@ -114,6 +111,26 @@
 
                     console.log(data.photos.features.length + ' photos to be shown.');
                     objectManager.add(data.photos);
+
+                    objectManager.objects.events.add(['mouseenter', 'mouseleave'], function (e) {
+                        var id = e.get('objectId');
+
+                        objectManager.objects.setObjectOptions(id, {
+                            preset: e.get('type') == 'mouseenter'
+                                ? 'islands#yellowIcon'
+                                : 'islands#blueIcon'
+                        });
+                    });
+
+                    objectManager.clusters.events.add(['mouseenter', 'mouseleave'], function (e) {
+                        var id = e.get('objectId');
+
+                        objectManager.clusters.setClusterOptions(id, {
+                            preset: e.get('type') == 'mouseenter'
+                                ? 'islands#yellowClusterIcons'
+                                : 'islands#blueClusterIcons'
+                        });
+                    });
                 });
             });
         });
