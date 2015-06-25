@@ -72,7 +72,7 @@ mongo.connect(mongo_url, function (err, db) {
         }, function (err, response, body) {
             var data = JSON.parse(body);
 
-            console.log('User: ' + data.data[0]);
+            console.log('User: ' + JSON.stringify(data.data[0]));
 
             ig.user_media_recent(data.data[0].id, use);
         });
