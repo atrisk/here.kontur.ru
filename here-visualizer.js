@@ -1,5 +1,6 @@
 var log       = require('./log.js').file('visualizer.log'),
     geo       = require('./geo.js'),
+    compress  = require('compression'),
     express   = require('express'),
     app       = express(),
     mongo     = require('mongodb').MongoClient,
@@ -10,6 +11,7 @@ var log       = require('./log.js').file('visualizer.log'),
 var photos = [];
 
 app
+    .use(compress())
     .use(express.static(path))
     .get('/', function (req, res) {
         res.send(path + 'index.html');
