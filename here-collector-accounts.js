@@ -35,6 +35,8 @@ mongo.connect(mongo_url, function (err, db) {
         } */
         
         if (err) {
+            console.log(err);
+            
             return;
         }
 
