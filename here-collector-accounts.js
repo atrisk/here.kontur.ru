@@ -42,7 +42,7 @@ mongo.connect(mongo_url, function (err, db) {
             collection.updateOne({ id: photo.id }, photo, { upsert: true }, function(err, result) {
                 log.check(err);
 
-                upserted_count += result.upsertedCount;
+                // upserted_count += result.upsertedCount;
             });
         });
 
