@@ -77,8 +77,13 @@
                 });
 
                 var objectManager = new ymaps.ObjectManager({
-                    clusterize: true
+                    clusterize: true,
+                    geoObjectOpenBalloonOnClick: false,
+                    clusterOpenBalloonOnClick: false
                 });
+
+                objectManager.objects.events.add(['mouseenter', 'mouseleave'], onObjectEvent);
+                objectManager.clusters.events.add(['mouseenter', 'mouseleave'], onClusterEvent);
 
                 map.geoObjects.add(objectManager);
 
