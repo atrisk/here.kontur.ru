@@ -46,7 +46,7 @@ request.post({
                         return accounts.indexOf(elem) == pos;
                     });
 
-                    console.log(accounts);
+                    console.log(accounts.length + ' accounts. Nice!');
 
                     fs.writeFile(accounts_file, JSON.stringify(accounts));
                 }
