@@ -33,6 +33,10 @@ mongo.connect(mongo_url, function (err, db) {
 
             return;
         } */
+        
+        if (err) {
+            return;
+        }
 
         photos.forEach(function (photo) {
             collection.updateOne({ id: photo.id }, photo, { upsert: true }, function(err, result) {
