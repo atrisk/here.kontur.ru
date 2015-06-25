@@ -70,11 +70,16 @@ mongo.connect(mongo_url, function (err, db) {
         request({
             url : 'https://api.instagram.com/v1/users/search?q=' + user + '&client_id=' + client_id
         }, function (err, response, body) {
-            var data = JSON.parse(body);
+            var data = JSON.parse(body),
+                user = data.data[0];
+                
+            if (!user.id) {
+                return;
+            }
 
-            console.log('User: ' + JSON.stringify(data.data[0]));
+            console.log('User: ' + user.username);
 
-            ig.user_media_recent(data.data[0].id, use);
+            ig.user_media_recent(user.id, use);
         });
     });
 });
